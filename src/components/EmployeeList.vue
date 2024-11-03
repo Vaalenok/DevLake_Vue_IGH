@@ -32,11 +32,11 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { getAllUsers } from '/src/scripts/requests.js'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import TopBar from "@/components/TopBar.vue";
 
 interface User {
-  id: number
+  id: string
   name: string
   company: string
   experience: number
@@ -52,20 +52,20 @@ function handleRowClick(row: User) {
 }
 
 // Асинхронная функция для получения данных
-const fetchData = async () => {
+async function fetchData() {
   try {
     let rawData = await getAllUsers()
     const users: User[] = rawData.map(user => ({
-      id: user.external_id,
+      id: user.id,
       name: user.full_name,
       company: user.company,
-      experience: user.experience,
+      experience: user.experience
     }));
     tableData.value = users; // Установка полученных данных в реактивную переменную
   } catch (error) {
     console.error("Ошибка при получении данных:", error);
   }
-};
+}
 
 fetchData(); // Вызов функции для получения данных
 </script>
