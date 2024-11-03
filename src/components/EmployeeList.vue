@@ -28,6 +28,7 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import { getAllUsers } from '/src/scripts/requests.js'
 
 interface User {
   id: number
@@ -44,30 +45,5 @@ function handleRowClick(row: User) {
   })
 }
 
-const tableData: User[] = [
-  {
-    id: 1,
-    name: 'Tom',
-    company: 'No. 189, Grove St, Los Angeles',
-    experience: 2
-  },
-  {
-    id: 2,
-    name: 'Jack',
-    company: 'No. 182, Grove St, Los Angeles',
-    experience: 4
-  },
-  {
-    id: 3,
-    name: 'Mary',
-    company: 'No. 185, Grove St, Los Angeles',
-    experience: 3
-  },
-  {
-    id: 4,
-    name: 'Lena',
-    company: 'No. 181, Grove St, Los Angeles',
-    experience: 6
-  },
-]
+const tableData: User[] = await getAllUsers()
 </script>
