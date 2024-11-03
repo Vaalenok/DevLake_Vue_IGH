@@ -1,19 +1,29 @@
 <template>
   <TopBar/>
   <h1 style="margin-bottom: 10px">Информация о сотруднике</h1>
-
   <div style="font-size: 18px; line-height: 2">
     <p><strong>Имя:</strong> {{ user.name }}</p>
     <p><strong>Компания:</strong> {{ user.company }}</p>
     <p><strong>Стаж:</strong> {{ user.experience }}</p>
   </div>
+  <h1 style="margin-bottom: 10px">Отзывы</h1>
+  <el-input
+      v-model="textarea"
+      size="large"
+      :autosize="{ minRows: 3, maxRows: 6 }"
+      type="textarea"
+      placeholder="Оставте отзыв"
+  />
+  <FeedbackCard />
 </template>
+
 
 <script lang="ts" setup>
 import {ref} from 'vue'
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import TopBar from "@/components/TopBar.vue"
-import { getUserById } from '/src/scripts/requests'
+import {getUserById} from "@/scripts/requests"
+import FeedbackCard from "@/components/FeedbackCard.vue";
 
 interface User {
   id: number
@@ -29,16 +39,18 @@ const user = ref<User>()
 async function fetchData() {
   try {
     let rawData = await getUserById(params.id)
-    const currentUser: User = {
+    user.value = {
       id: rawData.id,
       name: rawData.full_name,
       company: rawData.company,
       experience: rawData.experience,
-    }
-    user.value = currentUser; // Установка полученных данных в реактивную переменную
+    };
   } catch (error) {
     console.error("Ошибка при получении данных:", error);
   }
 }
 fetchData()
+
+const textarea = ref('')
+
 </script>
