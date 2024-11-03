@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <h1>Информация о сотруднике</h1>
+  <TopBar/>
+  <h1 style="margin-bottom: 10px">Информация о сотруднике</h1>
+
+  <div style="font-size: 18px; line-height: 2">
     <p><strong>Имя:</strong> {{ user.name }}</p>
     <p><strong>Компания:</strong> {{ user.company }}</p>
     <p><strong>Стаж:</strong> {{ user.experience }}</p>
-    <router-link to="/">Назад к списку</router-link>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
+import TopBar from "@/components/TopBar.vue";
 
 interface User {
   id: number
@@ -18,7 +20,6 @@ interface User {
   company: string
   experience: string
 }
-
 const route = useRoute()
 const { params } = route
 
