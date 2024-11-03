@@ -22,11 +22,11 @@
         label="Стаж"
         sortable
     />
-
   </el-table>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getAllUsers } from '/src/scripts/requests.js'
 
@@ -38,12 +38,29 @@ interface User {
 }
 
 const router = useRouter()
+const tableData = ref<User[]>([]) // Инициализируем как реактивную переменную
 
 function handleRowClick(row: User) {
   router.push({
-    path: `/employee/${row.id}`
+    path: `/employee/${row.id}` // исправлено на обратные кавычки
   })
 }
 
-const tableData: User[] = await getAllUsers()
+// Асинхронная функция для получения данных
+const fetchData = async () => {
+  try {
+    let rawData = await getAllUsers()
+    const users: User[] = rawData.map(user => ({
+      id: user.external_id,
+      name: user.full_name,
+      company: user.company,
+      experience: user.experience,
+    }));
+    tableData.value = users; // Установка полученных данных в реактивную переменную
+  } catch (error) {
+    console.error("Ошибка при получении данных:", error);
+  }
+};
+
+fetchData(); // Вызов функции для получения данных
 </script>
