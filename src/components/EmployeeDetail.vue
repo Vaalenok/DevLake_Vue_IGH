@@ -9,7 +9,15 @@
     <p><strong>Стаж:</strong> {{ user.experience }}</p>
   </div>
 
-  <el-input v-model="textarea" size="large" :autosize="{ minRows: 3, maxRows: 6 }" type="textarea" placeholder="Оставте отзыв" />
+  <el-input
+      style="margin-bottom: 10px"
+      v-model="textarea"
+      size="large"
+      :autosize="{ minRows: 3, maxRows: 6 }"
+      type="textarea"
+      placeholder="Оставте отзыв"
+  />
+  <el-button type="primary" size="large" @click="submitFeedback">Отправить отзыв</el-button>
 
   <FeedbackList :userId="user.id" />
 </template>
@@ -19,7 +27,7 @@ import { ref, onMounted } from 'vue';
 import TopBar from "@/components/TopBar.vue";
 import FeedbackList from "@/components/FeedbackList.vue";
 import { useRoute } from 'vue-router';
-import { getUserById } from "@/scripts/requests";
+import { getUserById, addFeedback } from "@/scripts/requests";
 
 interface User {
   id: string;
@@ -48,4 +56,18 @@ async function fetchData() {
 fetchData();
 
 const textarea = ref('');
+
+async function submitFeedback() {
+  if (textarea.value) {
+    try {
+      await addFeedback({ userId: user.value.id, text: textarea.value });
+      textarea.value = ''; // Очищаем поле ввода
+      console.log("Отзыв успешно отправлен!");
+    } catch (error) {
+      console.error("Ошибка при отправке отзыва:", error);
+    }
+  } else {
+    alert("Пожалуйста, оставьте текст отзыва.");
+  }
+}
 </script>

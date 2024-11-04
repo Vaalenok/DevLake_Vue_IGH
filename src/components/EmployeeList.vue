@@ -17,6 +17,7 @@
   </el-table>
 
   <el-pagination
+      style="justify-content: center; margin-top: 10px"
       background
       layout="prev, pager, next"
       :total="totalUsers"
